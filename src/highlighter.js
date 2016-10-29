@@ -1,20 +1,22 @@
 // required: jQuery, GM_deleteValue, GM_getValue, GM_registerMenuCommand, GM_setValue
 
 jQuery.highlight = (function ($) {
-    var CLASS          = 'github-com-chocolateboy-userscripts-jquery-highlighter-highlighted';
+    var CLASS          = 'github-com-chocolateboy-jquery-highlighter-highlighted';
     var DEFAULT_ID     = 'id';
     var DEFAULT_TARGET = function () { return $(this) }; // i.e. $item
     var DEFAULT_TTL    = { days: 7 };
     var DEFAULT_COLOR  = '#FFFD66';
     var KEY            = 'seen';
 
+    // time-to-live: how long (in seconds) to cache IDs for
     var TTL = (function (ttl) {
-        ttl.minutes = 60 * ttl.seconds;
-        ttl.hours   = 60 * ttl.minutes;
-        ttl.days    = 24 * ttl.hours;
-        ttl.weeks   = 7  * ttl.days;
+        ttl.second = ttl.seconds = 1;
+        ttl.minute = ttl.minutes = 60 * ttl.seconds;
+        ttl.hour   = ttl.hours   = 60 * ttl.minutes;
+        ttl.day    = ttl.days    = 24 * ttl.hours;
+        ttl.week   = ttl.weeks   = 7  * ttl.days;
         return ttl;
-    })({ seconds: 1000 });
+    })({});
 
     // register this early so data can be cleared even if there's an error
     var commandName = GM_info.script.name + ': clear data';
@@ -22,13 +24,13 @@ jQuery.highlight = (function ($) {
     GM_registerMenuCommand(commandName, function () { GM_deleteValue(KEY) });
 
     function ttlToMilliseconds (ttl) {
-        var ms = 0, key;
+        var seconds = 0, key;
 
         for (key in ttl) {
-            ms += ttl[key] * (TTL[key] || 0);
+            seconds += ttl[key] * (TTL[key] || 0);
         }
 
-        return ms;
+        return seconds * 1000;
     }
 
     function select (name, selector, _context, args) {
@@ -45,6 +47,11 @@ jQuery.highlight = (function ($) {
     }
 
     function highlight (options) {
+        // if true, the cache is neither read from nor written to.
+        // this allows highlighters to be modified and reloaded
+        // without having to manually clear the cache every time
+        var debug = options.debug;
+
         // article ID -> cache expiry timestamp (epoch milliseconds)
         var seen = debug ? {} : JSON.parse(GM_getValue(KEY, '{}'));
 
@@ -54,33 +61,28 @@ jQuery.highlight = (function ($) {
         // the background color of the target element(s)
         var color = options.color || DEFAULT_COLOR;
 
-        // if true, the cache is neither read from nor written to.
-        // this allows userscripts to be modified and reloaded
-        // without having to manually clear the cache each time
-        var debug = options.debug;
-
-        // the current date/time in epoch milliseconds
-        var now = new Date().getTime();
-
-        // purge expired IDs
-        for (var id in seen) {
-            if (now > seen[id]) {
-                delete seen[id];
-            }
-        }
-
+        // selector (string or function) for the element to highlight
         var targetSelector = options.target || DEFAULT_TARGET;
+
+        // attribute name (string) or function to select a unique
+        // identifier for the item
         var idSelector = options.id || DEFAULT_ID;
+
+        // selector (string or function) for the article/story &c.
         var itemSelector = options.item;
 
+        // optional callback function called after the target has been highlighted
+        var onHighlight = options.onHighlight || function () {};
+
+        // helper function which gets the unique ID for an item
         var getId = (typeof idSelector === 'function') ?
             function (item, args) { return select('id', idSelector, item, args) } :
             function (item) { return $(item).attr(idSelector) };
 
-        var onHighlight = options.onHighlight || function () {};
+        // the current date/time in epoch milliseconds
+        var now = new Date().getTime();
 
-        var $items = select('item', itemSelector);
-
+        // highlight the selected articles/stories
         function processItems ($items) {
             $items.each(function () {
                 var $target = select('target', targetSelector, this);
@@ -99,19 +101,27 @@ jQuery.highlight = (function ($) {
             }
         }
 
-        // handle dynamically-created items if the jQuery-onMutate plugin is loaded
-        var $document = $(document);
-
-        if ($document.onCreate && (typeof itemSelector === 'string')) {
-            $document.onCreate(itemSelector, processItems, true);
+        // purge expired IDs
+        for (var id in seen) {
+            if (now > seen[id]) {
+                delete seen[id];
+            }
         }
 
-        // handle the statically-defined items
-        processItems($items);
+        var $document = $(document);
+
+        //  if the jQuery-onMutate plugin is loaded
+        if ($document.onCreate && (typeof itemSelector === 'string')) {
+            // handle dynamically-created items (includes statically-defined items)
+            $document.onCreate(itemSelector, processItems, true /* multi */);
+        } else {
+            // handle statically-defined items
+            processItems(select('item', itemSelector));
+        }
     }
 
-    highlight.className = CLASS;
-    highlight['class']  = '.' + CLASS;
+    highlight.className = highlight['class'] = CLASS;
+    highlight.selector = '.' + CLASS;
 
     return highlight;
 }(jQuery));
