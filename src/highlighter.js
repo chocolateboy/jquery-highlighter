@@ -47,10 +47,14 @@ jQuery.highlight = (function ($) {
     }
 
     function highlight (options) {
-        // if true, the cache is neither read from nor written to.
+        // if truthy, the cache is neither read from nor written to.
         // this allows highlighters to be modified and reloaded
         // without having to manually clear the cache every time
         var debug = options.debug;
+
+        // if set to a falsey value, don't deduplicate article IDs i.e.
+        // highlight duplicate links
+        var highlightDuplicateLinks = ('dedup' in options) ? !options.dedup : false;
 
         // article ID -> cache expiry timestamp (epoch milliseconds)
         var seen = debug ? {} : JSON.parse(GM_getValue(KEY, '{}'));
@@ -88,10 +92,14 @@ jQuery.highlight = (function ($) {
                 var $target = select('target', targetSelector, this);
                 var id = getId(this, [ $target ]);
 
-                if (!seen[id]) {
+                if (!seen[id] || highlightDuplicateLinks) {
                     $target.css('background-color', color);
                     $target.addClass(CLASS);
                     onHighlight.call(this, $target, { id: id, color: color });
+
+                }
+
+                if (!seen[id]) {
                     seen[id] = now + ttl;
                 }
             });
