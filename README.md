@@ -1,8 +1,7 @@
 # jquery-highlighter
 
-A jQuery plugin to highlight new items (e.g. articles, stories, comments) on news sites
+A jQuery plugin to highlight new items on news sites
 
-- [jquery-highlighter](#jquery-highlighter)
 - [INSTALL](#install)
 - [SYNOPSIS](#synopsis)
 - [DESCRIPTION](#description)
@@ -62,9 +61,9 @@ The plugin's functionality is exposed as a method on the jQuery factory object, 
 a declarative API with defaults that cover most use cases. In most cases, only two or three parameters are needed to create a
 new highlighter, only one of which is mandatory:
 
-* `item`: a selector for each article/story &c. (required)
-* `target`: selects the element(s) within the item element(s) that should be highlighted (defaults to the item itself if not specified)
-* `id`: a way to uniquely identify each item (defaults to the item's `id` attribute if not specified)
+* [`item`](#item): a selector for each article/story &c. (required)
+* [`target`](#target): selects the element(s) within the item element(s) that should be highlighted (defaults to the item itself if not specified)
+* [`id`](#id): a way to uniquely identify each item (defaults to the item's `id` attribute if not specified)
 
 With these settings, and a few optional extras, the following behavior is enabled:
 
