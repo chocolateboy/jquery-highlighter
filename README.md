@@ -64,7 +64,9 @@ $.highlight({
 jQuery Highlighter is a [jQuery](https://jquery.com/) plugin which can be used to highlight new items (e.g. articles, stories, comments)
 on news sites, blogs, forums and other sites where old content is replaced by new content.
 
-For an example of this plugin in action, see [here](https://github.com/chocolateboy/userscripts#highlighters).
+For some examples of this plugin in action, see [here](https://github.com/chocolateboy/userscripts#highlighters):
+
+<a href="https://github.com/chocolateboy/userscripts#highlighters"><img src="https://i.imgur.com/y0goAMH.png" alt="Hacker News Highlighter"/></a>
 
 The plugin's functionality is exposed as a method on the jQuery factory object, which hides the implementation details behind
 a declarative API with defaults that cover most use cases. In most cases, only two or three parameters are needed to create a
