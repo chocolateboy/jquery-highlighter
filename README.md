@@ -280,7 +280,7 @@ function isHighlighted (el) {
 }
 ```
 
-The name of the CSS class added to highlighted elements. See [target](#target) for more details.
+The name of the CSS class added to highlighted elements. See [`target`](#target) for more details.
 
 #### selector
 
@@ -291,7 +291,7 @@ const $highlighted = $($.highlight.selector)
 ```
 
 A CSS selector string which matches highlighted elements i.e. the highlighted [class name](#classname) with a dot (`.`) prepended.
-See [target](#target) for more details.
+See [`target`](#target) for more details.
 
 # COMPATIBILITY
 
