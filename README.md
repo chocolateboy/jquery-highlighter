@@ -1,31 +1,35 @@
 # jquery-highlighter
 
-A jQuery plugin to highlight new contents on news sites
+A jQuery plugin to highlight new items (e.g. articles, stories, comments) on news sites
 
+- [jquery-highlighter](#jquery-highlighter)
 - [INSTALL](#install)
 - [SYNOPSIS](#synopsis)
 - [DESCRIPTION](#description)
-- [DEPENDENCIES](#dependencies)
-  - [Required](#required)
-  - [Optional](#optional)
+  - [Permissions](#permissions)
 - [STATIC METHODS](#static-methods)
   - [highlight](#highlight)
+    - [color](#color)
+    - [debug](#debug)
+    - [dedup](#dedup)
+    - [onHighlight](#onhighlight)
+    - [id](#id)
     - [item](#item)
     - [target](#target)
-    - [id](#id)
+    - [ttl](#ttl)
 - [COMPATIBILITY](#compatibility)
 - [SEE ALSO](#see-also)
 - [AUTHOR](#author)
 - [COPYRIGHT AND LICENSE](#copyright-and-license)
 
-## INSTALL
+# INSTALL
 
 Save the minified file in the `dist` directory or use a CDN e.g.:
 
 * [RawGit](https://cdn.rawgit.com/chocolateboy/jquery-highlighter/v2.1.0/dist/highlighter.min.js)
 * [Git CDN](https://gitcdn.xyz/repo/chocolateboy/jquery-highlighter/v2.1.0/dist/highlighter.min.js)
 
-## SYNOPSIS
+# SYNOPSIS
 
 ```javascript
 // ==UserScript==
@@ -41,124 +45,221 @@ Save the minified file in the `dist` directory or use a CDN e.g.:
 // ==/UserScript==
 
 $.highlight({
-    item:   'div#story',
+    item:   'div.story',
     target: 'a.title',
     id:     'data-story-id'
 })
 ```
 
-## DESCRIPTION
+# DESCRIPTION
 
 jQuery Highlighter is a [jQuery](https://jquery.com/) plugin which can be used to highlight new items (e.g. articles, stories, comments)
-on news sites, blogs, forums and other sites with lists of content that are updated, with newer items replacing older items.
+on news sites, blogs, forums and other sites where new content replaces old content.
 
-For an example of this plugin in use, highlighters for BBC News, Hacker News, Reddit and other sites can be found
-[here](https://github.com/chocolateboy/userscripts#highlighters).
+For an example of this plugin in action, see [here](https://github.com/chocolateboy/userscripts#highlighters).
 
 The plugin's functionality is exposed as a method on the jQuery factory object, which hides the implementation details behind
-a simple declarative API with sensible defaults. In most cases, only two or three options need to be supplied to create a new highlighter,
-only one of which is mandatory:
+a declarative API with defaults that cover most use cases. In most cases, only two or three parameters are needed to create a
+new highlighter, only one of which is mandatory:
 
 * `item`: a selector for each article/story &c. (required)
-* `target`: selects the node within the item element(s) that should be highlighted (defaults to the whole item if not specified)
+* `target`: selects the element(s) within the item element(s) that should be highlighted (defaults to the item itself if not specified)
 * `id`: a way to uniquely identify each item (defaults to the item's `id` attribute if not specified)
 
 With these settings, and a few optional extras, the following behavior is enabled:
 
 * the first time a news page/site is visited, all of its items are highlighted in yellow (by default)
 * on subsequent visits, only new content (i.e. content that has been added since the last visit) is highlighted
-* eventually, after a period of time (14 days by default), the cached records for seen items are purged to save space
+* eventually, after a period of time (14 days by default), the cache entries for seen items are purged to save space
+
+## Permissions
 
 In order for highlighting to work in userscripts, the following permissions must be granted:
 
-* `GM_deleteValue` - used to clear cached records after they've expired
-* `GM_getValue` - used to retrieve the cached record (if any) for an item
+* `GM_deleteValue` - used to clear cached IDs after they've expired
+* `GM_getValue` - used to retrieve the cache entry (if any) for an item
 * `GM_registerMenuCommand` - used to add a userscript menu command which allows the cache to be cleared
-* `GM_setValue` - used to add a new record to the cache of seen content
+* `GM_setValue` - used to add a new entry to the cache of seen item IDs
 
-## DEPENDENCIES
+# STATIC METHODS
 
-### Required
-
-* jQuery - jQuery is required and must be loaded before the plugin. See the [compatibility](#compatibility) section below for more details.
-
-### Optional
-
-* [jQuery-onMutate](https://github.com/eclecto/jQuery-onMutate) - if this jQuery plugin is loaded (before [`highlight`](#highlight) is called),
-additional functionality is enabled, as described [below](#item).
-
-## STATIC METHODS
-
-### highlight
+## highlight
 
 **Signature**: `(options: Object) ⇒ void`
 
-Set up highlighting for the current page. Takes an object with the following options:
+Highlight new items on the current page. Takes an object with the following options:
 
-#### item
+### color
 
-**Type**: `string | Function`, required
+**Type**: `string`, default: `"#FFFD66"`
 
 ```javascript
 $.highlight({
-    item: 'div#story'
+    item: 'div.story',
+    color: '#FFFFAB',
+})
+```
+
+The background color to use as a HTML color string. The background of the target element(s) of new items is set to this color.
+
+### debug
+
+**Type**: `boolean`, default: `false`
+
+```javascript
+$.highlight({
+    item: 'div.story',
+    debug: true,
+})
+```
+
+If true, the cache is neither read from nor written to. This allows highlighters to be modified and reloaded without having to manually
+clear the cache every time.
+
+### dedup
+
+**Type**: `boolean`, default: `true`
+
+```javascript
+$.highlight({
+    item: 'div.story',
+    debug: true,
+    dedup: false,
+})
+```
+
+If false, items are highlighted even if their IDs have already been seen. If true (the default), items are deduplicated
+i.e. items with IDs that have already been highlighted are skipped (not highlighted) if they appear again on the same page.
+Turning off the cache (with [`debug`](#debug)) and deduplication can be useful when developing highlighters and troubleshooting selectors.
+
+### id
+
+**Type**: `string | (this: HTMLElement, target: JQuery) ⇒ string`
+
+```javascript
+$.highlight({
+    item: 'div.story',
+    id:   'data-story-id',
+})
+```
+
+A unique identifier for the item. If it's a string, the ID is the value of the attribute of that name in the item. If it's a function,
+it's passed the DOM element of each item as its `this` parameter and the selected target element(s) as a parameter and returns
+a unique ID for the item.
+
+If not supplied, it defaults to a function which returns the value of the item's `id` attribute. If the ID is not defined, a TypeError is raised.
+
+### item
+
+**Type**: `string | () ⇒ JQuery`, required
+
+```javascript
+$.highlight({
+    item: 'div.story'
 })
 ```
 
 A selector for items. An item is a piece of updatable content e.g. a news story, article, or comment. The selector can either be a
 jQuery selector string, or a function which returns the items as a jQuery collection.
 
-If the item selector is a string and the jQuery-onMutate plugin is loaded, it is used to detect items that are loaded dynamically
+If the item selector is a string and the [jQuery-onMutate](https://github.com/eclecto/jQuery-onMutate) plugin is loaded, it is used to detect items that are loaded dynamically
 i.e. to highlight items loaded or displayed after the initial page load.
 
-#### target
+### onHighlight
 
-**Type**: `string | (this: JQuery, item: JQuery) ⇒ JQuery`, default: the selected item
+**Type**: `(this: HTMLElement, target: JQuery, { id: string, color: string }) ⇒ void`
+
+```javascript
+// if the text is inverted (white on black), make it dark so that it remains
+// legible on a yellow background
+function onHighlight ($target) {
+    if ($target.css('color') === 'rgb(255, 255, 255)') {
+        $target.css('color', 'rgb(34, 34, 34)')
+    }
+}
+
+$.highlight({ item: 'div.story', onHighlight })
+```
+
+A callback called after the target has been highlighted. Passed the item element as its `this` parameter,
+the target element(s) as a jQuery collection, and a second argument containing the item ID and background color.
+Can be used e.g. to customize or override the foreground or background color.
+
+### target
+
+**Type**: `string | (this: JQuery, item: JQuery) ⇒ JQuery`
 
 ```javascript
 $.highlight({
-    item:   'div#story',
+    item:   'div.story',
     target: 'a#title',
 })
 ```
 
 The target element(s) to highlight. Can be a jQuery selector string, which is evaluated relative to the item, or a function, which is passed the
-item as its `this` parameter and its sole explicit parameter, and which returns a jQuery collection containing the target element(s).
+item as its `this` parameter and first parameter, and which returns a jQuery collection containing the target element(s).
 
-If not supplied, it defaults to the selected item.
+If not supplied, it defaults to a function which returns the item.
 
-#### id
+Highlighted target elements have a class attached to them which allows them to be styled separately.
+The class name is available via `$.highlight.className`. It can also be accessed as a selector string (i.e. with a leading `.`)
+via `$.highlight.selector`.
 
-**Type**: `string | (this: HTMLElement, target: JQuery) ⇒ string`, default: a function which returns the value of the item's `id` attribute
+### ttl
+
+**Type**: `Object`, default: `{ days: 14 }`
 
 ```javascript
 $.highlight({
-    item: 'div#story',
-    id:   'data-story-id'
+    item: 'div.story',
+    ttl: { days: 28 },
 })
 ```
 
-A unique identifier for the item. If it's a string, the ID is the value of the attribute of that name in the item. If it's a function,
-it's passed the DOM element of each item (as its `this` parameter) and the selected target element(s) as a paremeter and returns
-a unique ID for the item.
+The "time to live" for cache entries i.e. how long each item ID should be remembered for. If an entry expires, it is removed from the cache,
+and an item with the same ID will be considered new and highlighted again.
 
-If not supplied, it defaults to a function which returns the value of the item's `id` attribute. If the ID is not defined, a TypeError is raised.
+The `ttl` object is a sort of mini-DSL in data form for specifying the duration: the value is the sum of each unit * value product where
+each unit denotes the corresponding number of seconds:
 
-## COMPATIBILITY
+| unit           | seconds          |
+|----------------|-----------------:|
+| second/seconds |                1 |
+| minute/minutes |               60 |
+| hour/hours     |          60 * 60 |
+| day/days       |     24 * 60 * 60 |
+| week/weeks     | 7 * 24 * 60 * 60 |
+
+These pairs can be combined e.g.:
+
+```javascript
+{
+    days: 28,
+    hours: 6,
+    minutes: 42,
+    seconds: 12,
+}
+```
+
+The singular and plural versions of each unit are equivalent e.g. `{ minute: 10 }` and `{ minutes: 10 }` both represent 600 seconds.
+
+If not supplied, it defaults to 14 days.
+
+# COMPATIBILITY
 
 * This plugin should work in any browser with ES5 support.
 * It has been tested with jQuery 3.x, and may not work with earlier versions.
 * It has been tested on Greasemonkey 3, but should work in all current userscript engines.
 
-## SEE ALSO
+# SEE ALSO
 
 * [Highlighter Userscripts](https://github.com/chocolateboy/userscripts#highlighters)
 
-## AUTHOR
+# AUTHOR
 
 [chocolateboy](mailto:chocolate@cpan.org)
 
-## COPYRIGHT AND LICENSE
+# COPYRIGHT AND LICENSE
 
 Copyright © 2013-2018 by chocolateboy
 
