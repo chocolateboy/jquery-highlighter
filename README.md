@@ -223,8 +223,8 @@ item as its `this` parameter and first parameter, and which returns a jQuery col
 If not supplied, it defaults to a function which returns the item.
 
 Highlighted target elements have a class attached to them which allows them to be styled separately.
-The class name is available via [`$.highlight.className`](#highlightclassname).
-It can also be accessed as a selector string (i.e. with a leading `.`) via [`$.highlight.selector`](#highlightselector).
+The class name is available via [`$.highlight.className`](#classname).
+It can also be accessed as a selector string (i.e. with a leading `.`) via [`$.highlight.selector`](#selector).
 
 #### ttl
 
