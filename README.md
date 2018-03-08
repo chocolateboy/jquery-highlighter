@@ -3,21 +3,26 @@
 A jQuery plugin to highlight new items on news sites
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 - [INSTALL](#install)
 - [SYNOPSIS](#synopsis)
 - [DESCRIPTION](#description)
   - [Permissions](#permissions)
-- [STATIC METHODS](#static-methods)
+- [STATIC PROPERTIES](#static-properties)
   - [highlight](#highlight)
-    - [color](#color)
-    - [debug](#debug)
-    - [dedup](#dedup)
-    - [id](#id)
-    - [item](#item)
-    - [onHighlight](#onhighlight)
-    - [target](#target)
-    - [ttl](#ttl)
+    - [Options](#options)
+      - [color](#color)
+      - [debug](#debug)
+      - [dedup](#dedup)
+      - [id](#id)
+      - [item](#item)
+      - [onHighlight](#onhighlight)
+      - [target](#target)
+      - [ttl](#ttl)
+    - [Properties](#properties)
+      - [className](#classname)
+      - [selector](#selector)
 - [COMPATIBILITY](#compatibility)
 - [SEE ALSO](#see-also)
 - [AUTHOR](#author)
@@ -57,7 +62,7 @@ $.highlight({
 # DESCRIPTION
 
 jQuery Highlighter is a [jQuery](https://jquery.com/) plugin which can be used to highlight new items (e.g. articles, stories, comments)
-on news sites, blogs, forums and other sites where new content replaces old content.
+on news sites, blogs, forums and other sites where old content is replaced by new content.
 
 For an example of this plugin in action, see [here](https://github.com/chocolateboy/userscripts#highlighters).
 
@@ -81,18 +86,29 @@ In order for highlighting to work in userscripts, the following permissions must
 
 * `GM_deleteValue` - used to clear cached IDs after they've expired
 * `GM_getValue` - used to retrieve the cache entry (if any) for an item
-* `GM_registerMenuCommand` - used to add a userscript menu command which allows the cache to be cleared
+* `GM_registerMenuCommand` - used to add a userscript menu command to clear the cache
 * `GM_setValue` - used to add a new entry to the cache of seen item IDs
 
-# STATIC METHODS
+# STATIC PROPERTIES
 
 ## highlight
 
 **Signature**: `(options: Object) ⇒ void`
 
-Highlight new items on the current page. Takes an object with the following options:
+```javascript
+$.highlight({
+    item:   'div.story',
+    target: 'a.title',
+    id:     'data-story-id',
+    ttl:    { days: 28 },
+})
+```
 
-### color
+Highlight new items on the current page. Takes an object with the following options.
+
+### Options
+
+#### color
 
 **Type**: `string`, default: `"#FFFD66"`
 
@@ -105,7 +121,7 @@ $.highlight({
 
 The background color to use as a HTML color string. The background of the target element(s) of new items is set to this color.
 
-### debug
+#### debug
 
 **Type**: `boolean`, default: `false`
 
@@ -119,7 +135,7 @@ $.highlight({
 If true, the cache is neither read from nor written to. This allows highlighters to be modified and reloaded without having to manually
 clear the cache every time.
 
-### dedup
+#### dedup
 
 **Type**: `boolean`, default: `true`
 
@@ -135,7 +151,7 @@ If false, items are highlighted even if their IDs have already been seen. If tru
 i.e. items with IDs that have already been highlighted are skipped (not highlighted) if they appear again on the same page.
 Turning off the cache (with [`debug`](#debug)) and deduplication can be useful when developing highlighters and troubleshooting selectors.
 
-### id
+#### id
 
 **Type**: `string | (this: HTMLElement, target: JQuery) ⇒ string`
 
@@ -152,7 +168,7 @@ a unique ID for the item.
 
 If not supplied, it defaults to a function which returns the value of the item's `id` attribute. If the ID is not defined, a TypeError is raised.
 
-### item
+#### item
 
 **Type**: `string | () ⇒ JQuery`, required
 
@@ -168,7 +184,7 @@ jQuery selector string, or a function which returns the items as a jQuery collec
 If the item selector is a string and the [jQuery-onMutate](https://github.com/eclecto/jQuery-onMutate) plugin is loaded, it is used to detect items that are loaded dynamically
 i.e. to highlight items loaded or displayed after the initial page load.
 
-### onHighlight
+#### onHighlight
 
 **Type**: `(this: HTMLElement, target: JQuery, { id: string, color: string }) ⇒ void`
 
@@ -186,9 +202,9 @@ $.highlight({ item: 'div.story', onHighlight })
 
 A callback called after the target has been highlighted. Passed the item element as its `this` parameter,
 the target element(s) as a jQuery collection, and a second argument containing the item ID and background color.
-Can be used e.g. to customize or override the foreground or background color.
+Can be used e.g. to customize or override a target's foreground or background color.
 
-### target
+#### target
 
 **Type**: `string | (this: JQuery, item: JQuery) ⇒ JQuery`
 
@@ -205,10 +221,10 @@ item as its `this` parameter and first parameter, and which returns a jQuery col
 If not supplied, it defaults to a function which returns the item.
 
 Highlighted target elements have a class attached to them which allows them to be styled separately.
-The class name is available via `$.highlight.className`. It can also be accessed as a selector string (i.e. with a leading `.`)
-via `$.highlight.selector`.
+The class name is available via [`$.highlight.className`](#highlightclassname).
+It can also be accessed as a selector string (i.e. with a leading `.`) via [`$.highlight.selector`](#highlightselector).
 
-### ttl
+#### ttl
 
 **Type**: `Object`, default: `{ days: 14 }`
 
@@ -247,6 +263,33 @@ These pairs can be combined e.g.:
 The singular and plural versions of each unit are equivalent e.g. `{ minute: 10 }` and `{ minutes: 10 }` both represent 600 seconds.
 
 If not supplied, it defaults to 14 days.
+
+### Properties
+
+The following properties are defined on the [`highlight`](#highlight) method.
+
+#### className
+
+**Type**: `string`
+
+```javascript
+function isHighlighted (el) {
+    return el.classList.contains($.highlight.className)
+}
+```
+
+The name of the CSS class added to highlighted elements. See [target](#target) for more details.
+
+#### selector
+
+**Type**: `string`
+
+```javascript
+const $highlighted = $($.highlight.selector)
+```
+
+A CSS selector string which matches highlighted elements i.e. the highlighted [class name](#classname) with a dot (`.`) prepended.
+See [target](#target) for more details.
 
 # COMPATIBILITY
 
