@@ -2,6 +2,8 @@
 
 A jQuery plugin to highlight new items on news sites
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+
 - [INSTALL](#install)
 - [SYNOPSIS](#synopsis)
 - [DESCRIPTION](#description)
@@ -11,15 +13,17 @@ A jQuery plugin to highlight new items on news sites
     - [color](#color)
     - [debug](#debug)
     - [dedup](#dedup)
-    - [onHighlight](#onhighlight)
     - [id](#id)
     - [item](#item)
+    - [onHighlight](#onhighlight)
     - [target](#target)
     - [ttl](#ttl)
 - [COMPATIBILITY](#compatibility)
 - [SEE ALSO](#see-also)
 - [AUTHOR](#author)
 - [COPYRIGHT AND LICENSE](#copyright-and-license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # INSTALL
 
