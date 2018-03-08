@@ -1,6 +1,6 @@
 # jquery-highlighter
 
-A jQuery plugin to highlight new items on news sites
+A jQuery plugin to highlight new items since the last time a site was visited
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
