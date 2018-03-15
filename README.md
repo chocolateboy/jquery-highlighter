@@ -5,6 +5,7 @@ A jQuery plugin to highlight new items since the last time a site was visited
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+- [SCREENSHOT](#screenshot)
 - [INSTALL](#install)
 - [SYNOPSIS](#synopsis)
 - [DESCRIPTION](#description)
@@ -39,6 +40,8 @@ Save the minified file in the `dist` directory or use a CDN e.g.:
 
 # SYNOPSIS
 
+<a href="https://github.com/chocolateboy/userscripts#highlighters"><img src="https://i.imgur.com/y0goAMH.png" alt="Hacker News Highlighter"/></a>
+
 ```javascript
 // ==UserScript==
 // @name          Example.com Highlighter
@@ -64,9 +67,7 @@ $.highlight({
 jQuery Highlighter is a [jQuery](https://jquery.com/) plugin which can be used to highlight new items (e.g. articles, stories, comments)
 on news sites, blogs, forums and other sites where old content is replaced by new content.
 
-For some examples of this plugin in action, see [here](https://github.com/chocolateboy/userscripts#highlighters):
-
-<a href="https://github.com/chocolateboy/userscripts#highlighters"><img src="https://i.imgur.com/y0goAMH.png" alt="Hacker News Highlighter"/></a>
+For some examples of this plugin in action, see [here](https://github.com/chocolateboy/userscripts#highlighters).
 
 The plugin's functionality is exposed as a method on the jQuery factory object, which hides the implementation details behind
 a declarative API with defaults that cover most use cases. In most cases, only two or three parameters are needed to create a
@@ -301,7 +302,8 @@ See [`target`](#target) for more details.
 
 # SEE ALSO
 
-* [Highlighter Userscripts](https://github.com/chocolateboy/userscripts#highlighters)
+* [chocolateboy/userscripts](https://github.com/chocolateboy/userscripts#highlighters) - highlighter userscripts which use this plugin
+* [theoky/HistoryOfTheSeen](https://github.com/theoky/HistoryOfTheSeen) - a userscript which greys out seen links on several sites
 
 # AUTHOR
 
