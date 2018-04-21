@@ -68,9 +68,9 @@ on news sites, blogs, forums and other sites where old content is replaced by ne
 
 For some examples of this plugin in action, see [here](https://github.com/chocolateboy/userscripts#highlighters).
 
-The plugin's functionality is exposed as a method on the jQuery factory object, which hides the implementation details behind
-a declarative API with defaults that cover most use cases. In most cases, only two or three parameters are needed to create a
-new highlighter, only one of which is mandatory:
+Highlighting is enabled by calling a method on the jQuery factory object. The method hides the implementation details behind
+a declarative API with defaults suitable for typical blog/news/aggregator sites. In most cases, only two or three parameters
+are needed to configure highlighting, only one of which is mandatory:
 
 * [`item`](#item): a selector for each article/story &c. (required)
 * [`target`](#target): selects the element(s) within the item element(s) that should be highlighted (defaults to the item itself if not specified)

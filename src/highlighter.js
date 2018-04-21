@@ -118,7 +118,7 @@ jQuery.highlight = (function ($) {
 
         var $document = $(document);
 
-        //  if the jQuery-onMutate plugin is loaded
+        // if the jQuery-onMutate plugin is loaded
         if ($document.onCreate && (typeof itemSelector === 'string')) {
             // handle dynamically-created items (includes statically-defined items)
             $document.onCreate(itemSelector, processItems, true /* multi */);
