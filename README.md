@@ -240,7 +240,7 @@ $.highlight({
 The "time to live" for cache entries i.e. how long each item ID should be remembered for. If an entry expires, it is removed from the cache,
 and an item with the same ID will be considered new and highlighted again.
 
-The `ttl` object is a sort of mini-DSL in data form for specifying the duration: the value is the sum of each unit * value product where
+The `ttl` object is a sort of mini-DSL in data form for specifying the duration: the value is the sum of each `unit * value` product where
 each unit denotes the corresponding number of seconds:
 
 | unit           | seconds          |
