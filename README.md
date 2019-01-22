@@ -1,6 +1,6 @@
 # jquery-highlighter
 
-A jQuery plugin to highlight new items since the last time a site was visited
+A jQuery plugin which highlights new items since the last time a site was visited
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -34,7 +34,7 @@ A jQuery plugin to highlight new items since the last time a site was visited
 
 Save the minified file in the `dist` directory or use a CDN e.g.:
 
-* [RawGit](https://cdn.rawgit.com/chocolateboy/jquery-highlighter/v2.1.0/dist/highlighter.min.js)
+* [jsDelivr](https://cdn.jsdelivr.net/gh/chocolateboy/jquery-highlighter@v2.1.0/dist/highlighter.min.js)
 * [Git CDN](https://gitcdn.xyz/repo/chocolateboy/jquery-highlighter/v2.1.0/dist/highlighter.min.js)
 
 # SYNOPSIS
@@ -44,10 +44,10 @@ Save the minified file in the `dist` directory or use a CDN e.g.:
 ```javascript
 // ==UserScript==
 // @name          Example.com Highlighter
-// @description   Highlight new stories on Example.com
-// @include       https://www.example.com/stories
+// @description   Highlight new articles on Example.com
+// @include       https://www.example.com/news
 // @require       https://code.jquery.com/jquery-3.3.1.min.js
-// @require       https://cdn.rawgit.com/chocolateboy/jquery-highlighter/v2.1.0/dist/highlighter.min.js
+// @require       https://cdn.jsdelivr.net/gh/chocolateboy/jquery-highlighter@v2.1.0/dist/highlighter.min.js
 // @grant         GM_deleteValue
 // @grant         GM_getValue
 // @grant         GM_registerMenuCommand
@@ -72,7 +72,7 @@ Highlighting is enabled by calling a method on the jQuery factory object. The me
 a declarative API with defaults suitable for typical blog/news/aggregator sites. In most cases, only two or three parameters
 are needed to configure highlighting, only one of which is mandatory:
 
-* [`item`](#item): a selector for each article/story &c. (required)
+* [`item`](#item): a selector for each article/story etc. (required)
 * [`target`](#target): selects the element(s) within the item element(s) that should be highlighted (defaults to the item itself if not specified)
 * [`id`](#id): a way to uniquely identify each item (defaults to the item's `id` attribute if not specified)
 
@@ -297,7 +297,7 @@ See [`target`](#target) for more details.
 
 * This plugin should work in any browser with ES5 support.
 * It has been tested with jQuery 3.x, and may not work with earlier versions.
-* It has been tested on Greasemonkey 3, but should work in all current userscript engines.
+* It has been tested on Greasemonkey 3 and Violentmonkey, but should work in all current userscript engines.
 
 # SEE ALSO
 
@@ -310,7 +310,7 @@ See [`target`](#target) for more details.
 
 # COPYRIGHT AND LICENSE
 
-Copyright © 2013-2018 by chocolateboy.
+Copyright © 2013-2019 by chocolateboy.
 
 This is free software; you can redistribute it and/or modify it under the terms
 of the [Artistic License 2.0](http://www.opensource.org/licenses/artistic-license-2.0.php).
