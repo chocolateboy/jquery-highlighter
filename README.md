@@ -2,8 +2,7 @@
 
 A jQuery plugin which highlights new items since the last time a site was visited
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+<!-- toc -->
 
 - [INSTALL](#install)
 - [SYNOPSIS](#synopsis)
@@ -28,7 +27,7 @@ A jQuery plugin which highlights new items since the last time a site was visite
 - [AUTHOR](#author)
 - [COPYRIGHT AND LICENSE](#copyright-and-license)
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+<!-- tocstop -->
 
 # INSTALL
 
@@ -63,14 +62,18 @@ $.highlight({
 
 # DESCRIPTION
 
-jQuery Highlighter is a [jQuery](https://jquery.com/) plugin which can be used to highlight new items (e.g. articles, stories, comments)
-on news sites, blogs, forums and other sites where old content is replaced by new content.
+jQuery Highlighter is a [jQuery](https://jquery.com/) plugin which can be used
+to highlight new items (e.g. articles, stories, comments) on news sites, blogs,
+forums and other sites where old content is replaced by new content.
 
-For some examples of this plugin in action, see [here](https://github.com/chocolateboy/userscripts#highlighters).
+For some examples of this plugin in action, see
+[here](https://github.com/chocolateboy/userscripts#highlighters).
 
-Highlighting is enabled by calling a method on the jQuery factory object. The method hides the implementation details behind
-a declarative API with defaults suitable for typical blog/news/aggregator sites. In most cases, only two or three parameters
-are needed to configure highlighting, only one of which is mandatory:
+Highlighting is enabled by calling a method on the jQuery factory object. The
+method hides the implementation details behind a declarative API with defaults
+suitable for typical blog/news/aggregator sites. In most cases, only two or
+three parameters are needed to configure highlighting, only one of which is
+mandatory:
 
 * [`item`](#item): a selector for each article/story etc. (required)
 * [`target`](#target): selects the element(s) within the item element(s) that should be highlighted (defaults to the item itself if not specified)
@@ -121,7 +124,8 @@ $.highlight({
 })
 ```
 
-The background color to use as a HTML color string. The background of the target element(s) of new items is set to this color.
+The background color to use as a HTML color string. The background of the
+target element(s) of new items is set to this color.
 
 #### debug
 
@@ -134,8 +138,9 @@ $.highlight({
 })
 ```
 
-If true, the cache is neither read from nor written to. This allows highlighters to be modified and reloaded without having to manually
-clear the cache every time.
+If true, the cache is neither read from nor written to. This allows
+highlighters to be modified and reloaded without having to manually clear the
+cache every time.
 
 #### dedup
 
@@ -149,9 +154,11 @@ $.highlight({
 })
 ```
 
-If false, items are highlighted even if their IDs have already been seen. If true (the default), items are deduplicated
-i.e. items with IDs that have already been highlighted are skipped (not highlighted) if they appear again on the same page.
-Turning off the cache (with [`debug`](#debug)) and deduplication can be useful when developing highlighters and troubleshooting selectors.
+If false, items are highlighted even if their IDs have already been seen. If
+true (the default), items are deduplicated i.e. items with IDs that have
+already been highlighted are skipped (not highlighted) if they appear again on
+the same page. Turning off the cache (with [`debug`](#debug)) and deduplication
+can be useful when developing highlighters and troubleshooting selectors.
 
 #### id
 
@@ -164,11 +171,13 @@ $.highlight({
 })
 ```
 
-A unique identifier for the item. If it's a string, the ID is the value of the attribute of that name in the item. If it's a function,
-it's passed the DOM element of each item as its `this` parameter and the selected target element(s) as a parameter and returns
-a unique ID for the item.
+A unique identifier for the item. If it's a string, the ID is the value of the
+attribute of that name in the item. If it's a function, it's passed the DOM
+element of each item as its `this` parameter and the selected target element(s)
+as a parameter and returns a unique ID for the item.
 
-If not supplied, it defaults to a function which returns the value of the item's `id` attribute. If the ID is not defined, a TypeError is raised.
+If not supplied, it defaults to a function which returns the value of the
+item's `id` attribute. If the ID is not defined, a TypeError is raised.
 
 #### item
 
@@ -180,11 +189,14 @@ $.highlight({
 })
 ```
 
-A selector for items. An item is a piece of updatable content e.g. a news story, article, or comment. The selector can either be a
-jQuery selector string, or a function which returns the items as a jQuery collection.
+A selector for items. An item is a piece of updatable content e.g. a news
+story, article, or comment. The selector can either be a jQuery selector
+string, or a function which returns the items as a jQuery collection.
 
-If the item selector is a string and the [jQuery-onMutate](https://github.com/eclecto/jQuery-onMutate) plugin is loaded, it is used to detect items that are loaded dynamically
-i.e. to highlight items loaded or displayed after the initial page load.
+If the item selector is a string and the
+[jQuery-onMutate](https://github.com/eclecto/jQuery-onMutate) plugin is loaded,
+it is used to (also) detect items that are loaded dynamically i.e. to highlight items
+loaded or displayed after the initial page load.
 
 #### onHighlight
 
@@ -202,9 +214,10 @@ function onHighlight ($target) {
 $.highlight({ item: 'div.story', onHighlight })
 ```
 
-A callback called after the target has been highlighted. Passed the item element as its `this` parameter,
-the target element(s) as a jQuery collection, and a second argument containing the item ID and background color.
-Can be used e.g. to customize or override a target's foreground or background color.
+A callback called after the target has been highlighted. Passed the item
+element as its `this` parameter, the target element(s) as a jQuery collection,
+and a second argument containing the item ID and background color. Can be used
+e.g. to customize or override a target's foreground or background color.
 
 #### target
 
@@ -213,18 +226,21 @@ Can be used e.g. to customize or override a target's foreground or background co
 ```javascript
 $.highlight({
     item:   'div.story',
-    target: 'a#title',
+    target: 'a.title',
 })
 ```
 
-The target element(s) to highlight. Can be a jQuery selector string, which is evaluated relative to the item, or a function, which is passed the
-item as its `this` parameter and first parameter, and which returns a jQuery collection containing the target element(s).
+The target element(s) to highlight. Can be a jQuery selector string, which is
+evaluated relative to the item, or a function, which is passed the item as its
+`this` parameter and first parameter, and which returns a jQuery collection
+containing the target element(s).
 
 If not supplied, it defaults to a function which returns the item.
 
-Highlighted target elements have a class attached to them which allows them to be styled separately.
-The class name is available via [`$.highlight.className`](#classname).
-It can also be accessed as a selector string (i.e. with a leading `.`) via [`$.highlight.selector`](#selector).
+Highlighted target elements have a class attached to them which allows them to
+be styled separately. The class name is available via
+[`$.highlight.className`](#classname). It can also be accessed as a selector
+string (i.e. with a leading `.`) via [`$.highlight.selector`](#selector).
 
 #### ttl
 
@@ -237,11 +253,13 @@ $.highlight({
 })
 ```
 
-The "time to live" for cache entries i.e. how long each item ID should be remembered for. If an entry expires, it is removed from the cache,
-and an item with the same ID will be considered new and highlighted again.
+The "time to live" for cache entries i.e. how long each item ID should be
+remembered for. If an entry expires, it is removed from the cache, and an item
+with the same ID will be considered new and highlighted again.
 
-The `ttl` object is a sort of mini-DSL in data form for specifying the duration: the value is the sum of each `unit * value` product where
-each unit denotes the corresponding number of seconds:
+The `ttl` object is a sort of mini-DSL in data form for specifying the
+duration: the value is the sum of each `unit * value` product where each unit
+denotes the corresponding number of seconds:
 
 | unit           | seconds          |
 |----------------|-----------------:|
@@ -262,7 +280,8 @@ These pairs can be combined e.g.:
 }
 ```
 
-The singular and plural versions of each unit are equivalent e.g. `{ minute: 10 }` and `{ minutes: 10 }` both represent 600 seconds.
+The singular and plural versions of each unit are equivalent e.g. `{ minute: 10
+}` and `{ minutes: 10 }` both represent 600 seconds.
 
 If not supplied, it defaults to 14 days.
 
@@ -290,8 +309,9 @@ The name of the CSS class added to highlighted elements. See [`target`](#target)
 const $highlighted = $($.highlight.selector)
 ```
 
-A CSS selector string which matches highlighted elements i.e. the highlighted [class name](#classname) with a dot (`.`) prepended.
-See [`target`](#target) for more details.
+A CSS selector string which matches highlighted elements i.e. the highlighted
+[class name](#classname) with a dot (`.`) prepended. See [`target`](#target)
+for more details.
 
 # COMPATIBILITY
 

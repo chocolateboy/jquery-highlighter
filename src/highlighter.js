@@ -50,6 +50,7 @@ jQuery.highlight = (function ($) {
         // if truthy, the cache is neither read from nor written to.
         // this allows highlighters to be modified and reloaded
         // without having to manually clear the cache every time
+        // FIXME rename this `debug = true` -> `cache = false`
         var debug = options.debug;
 
         // if set to a falsey value, don't deduplicate article IDs i.e.
@@ -78,7 +79,7 @@ jQuery.highlight = (function ($) {
         // optional callback function called after the target has been highlighted
         var onHighlight = options.onHighlight || function () {};
 
-        // helper function which gets the unique ID for an item
+        // helper function which extracts an item's unique ID
         var getId = (typeof idSelector === 'function') ?
             function (item, args) { return select('id', idSelector, item, args) } :
             function (item) { return $(item).attr(idSelector) };
@@ -90,13 +91,12 @@ jQuery.highlight = (function ($) {
         function processItems ($items) {
             $items.each(function () {
                 var $target = select('target', targetSelector, this);
-                var id = getId(this, [ $target ]);
+                var id = getId(this, [$target]);
 
                 if (!seen[id] || highlightDuplicateLinks) {
                     $target.css('background-color', color);
                     $target.addClass(CLASS);
                     onHighlight.call(this, $target, { id: id, color: color });
-
                 }
 
                 if (!seen[id]) {
