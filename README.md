@@ -31,10 +31,10 @@ A jQuery plugin which highlights new items since the last time a site was visite
 
 # INSTALL
 
-Save the minified file in the `dist` directory or use a CDN e.g.:
+Grab the minified file from the [`dist` directory](https://github.com/chocolateboy/jquery-highlighter/tree/master/dist) or use a CDN, e.g.:
 
-* [jsDelivr](https://cdn.jsdelivr.net/gh/chocolateboy/jquery-highlighter@v2.1.0/dist/highlighter.min.js)
-* [Git CDN](https://gitcdn.xyz/repo/chocolateboy/jquery-highlighter/v2.1.0/dist/highlighter.min.js)
+- [jsDelivr](https://cdn.jsdelivr.net/gh/chocolateboy/jquery-highlighter@v2.1.0/dist/highlighter.min.js)
+- [Git CDN](https://gitcdn.xyz/repo/chocolateboy/jquery-highlighter/v2.1.0/dist/highlighter.min.js)
 
 # SYNOPSIS
 
@@ -56,7 +56,7 @@ Save the minified file in the `dist` directory or use a CDN e.g.:
 $.highlight({
     item:   'div.story',
     target: 'a.title',
-    id:     'data-story-id'
+    id:     'data-story-id',
 })
 ```
 
@@ -75,24 +75,24 @@ suitable for typical blog/news/aggregator sites. In most cases, only two or
 three parameters are needed to configure highlighting, only one of which is
 mandatory:
 
-* [`item`](#item): a selector for each article/story etc. (required)
-* [`target`](#target): selects the element(s) within the item element(s) that should be highlighted (defaults to the item itself if not specified)
-* [`id`](#id): a way to uniquely identify each item (defaults to the item's `id` attribute if not specified)
+- [`item`](#item): a selector for each article/story etc. (required)
+- [`target`](#target): selects the element(s) within the item element(s) that should be highlighted (defaults to the item itself if not specified)
+- [`id`](#id): a way to uniquely identify each item (defaults to the value of the item's `id` attribute if not specified)
 
 With these settings, and a few optional extras, the following behavior is enabled:
 
-* the first time a news page/site is visited, all of its items are highlighted in yellow (by default)
-* on subsequent visits, only new content (i.e. content that has been added since the last visit) is highlighted
-* eventually, after a period of time (14 days by default), the cache entries for seen items are purged to save space
+- the first time a news page/site is visited, all of its items are highlighted in yellow (by default)
+- on subsequent visits, only new content (i.e. content that has been added since the last visit) is highlighted
+- eventually, after a period of time (14 days by default), the cache entries for seen items are purged to save space
 
 ## Permissions
 
 In order for highlighting to work in userscripts, the following permissions must be granted:
 
-* `GM_deleteValue` - used to clear cached IDs after they've expired
-* `GM_getValue` - used to retrieve the cache entry (if any) for an item
-* `GM_registerMenuCommand` - used to add a userscript menu command to clear the cache
-* `GM_setValue` - used to add a new entry to the cache of seen item IDs
+- `GM_deleteValue` - used to clear cached IDs after they've expired
+- `GM_getValue` - used to retrieve the cache entry (if any) for an item
+- `GM_registerMenuCommand` - used to add a userscript menu command to clear the cache
+- `GM_setValue` - used to add a new entry to the cache of seen item IDs
 
 # STATIC PROPERTIES
 
@@ -315,14 +315,14 @@ for more details.
 
 # COMPATIBILITY
 
-* This plugin should work in any browser with ES5 support.
-* It has been tested with jQuery 3.x, and may not work with earlier versions.
-* It has been tested on Greasemonkey 3 and Violentmonkey, but should work in all current userscript engines.
+- This plugin should work in any browser with ES5 support.
+- It has been tested with jQuery 3.x, and may not work with earlier versions.
+- It has been tested on Greasemonkey 3 and Violentmonkey, but should work in all current userscript engines.
 
 # SEE ALSO
 
-* [chocolateboy/userscripts](https://github.com/chocolateboy/userscripts#highlighters) - highlighter userscripts which use this plugin
-* [theoky/HistoryOfTheSeen](https://github.com/theoky/HistoryOfTheSeen) - a userscript which greys out seen links on several sites
+- [chocolateboy/userscripts](https://github.com/chocolateboy/userscripts#highlighters) - highlighter userscripts which use this plugin
+- [theoky/HistoryOfTheSeen](https://github.com/theoky/HistoryOfTheSeen) - a userscript which greys out seen links on several sites
 
 # AUTHOR
 
@@ -330,7 +330,7 @@ for more details.
 
 # COPYRIGHT AND LICENSE
 
-Copyright © 2013-2019 by chocolateboy.
+Copyright © 2013-2020 by chocolateboy.
 
 This is free software; you can redistribute it and/or modify it under the terms
 of the [Artistic License 2.0](http://www.opensource.org/licenses/artistic-license-2.0.php).
