@@ -1,6 +1,6 @@
 {
     "name": "jquery-highlighter",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "description": "A jQuery plugin which highlights new items since the last time a site was visited",
     "repository": "chocolateboy/jquery-highlighter",
     "author": "chocolateboy",
