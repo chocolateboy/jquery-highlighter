@@ -4,13 +4,17 @@ A jQuery plugin which highlights new items since the last time a site was visite
 
 <!-- toc -->
 
-- [INSTALL](#install)
 - [SYNOPSIS](#synopsis)
-- [DESCRIPTION](#description)
+- [INSTALLATION](#installation)
+  - [Dependencies](#dependencies)
+    - [Required](#required)
+    - [Optional](#optional)
   - [Permissions](#permissions)
+- [DESCRIPTION](#description)
 - [STATIC PROPERTIES](#static-properties)
   - [highlight](#highlight)
     - [Options](#options)
+      - [cache](#cache)
       - [color](#color)
       - [debug](#debug)
       - [dedup](#dedup)
@@ -24,17 +28,11 @@ A jQuery plugin which highlights new items since the last time a site was visite
       - [selector](#selector)
 - [COMPATIBILITY](#compatibility)
 - [SEE ALSO](#see-also)
+- [VERSION](#version)
 - [AUTHOR](#author)
 - [COPYRIGHT AND LICENSE](#copyright-and-license)
 
 <!-- tocstop -->
-
-# INSTALL
-
-Save the minified file in the `dist` directory or use a CDN e.g.:
-
-* [jsDelivr](https://cdn.jsdelivr.net/gh/chocolateboy/jquery-highlighter@v2.1.0/dist/highlighter.min.js)
-* [Git CDN](https://gitcdn.xyz/repo/chocolateboy/jquery-highlighter/v2.1.0/dist/highlighter.min.js)
 
 # SYNOPSIS
 
@@ -45,10 +43,11 @@ Save the minified file in the `dist` directory or use a CDN e.g.:
 // @name          Example.com Highlighter
 // @description   Highlight new articles on Example.com
 // @include       https://www.example.com/news
-// @require       https://code.jquery.com/jquery-3.3.1.min.js
-// @require       https://cdn.jsdelivr.net/gh/chocolateboy/jquery-highlighter@v2.1.0/dist/highlighter.min.js
+// @require       https://code.jquery.com/jquery-3.5.0.min.js
+// @require       https://cdn.jsdelivr.net/gh/chocolateboy/jquery-highlighter@v3.0.0/dist/highlighter.min.js
 // @grant         GM_deleteValue
 // @grant         GM_getValue
+// @grant         GM_listValues
 // @grant         GM_registerMenuCommand
 // @grant         GM_setValue
 // ==/UserScript==
@@ -56,9 +55,38 @@ Save the minified file in the `dist` directory or use a CDN e.g.:
 $.highlight({
     item:   'div.story',
     target: 'a.title',
-    id:     'data-story-id'
+    id:     'data-story-id',
 })
 ```
+
+# INSTALLATION
+
+Grab a file from the [`dist`](dist) directory or use a CDN, e.g.:
+
+- [jsDelivr](https://cdn.jsdelivr.net/gh/chocolateboy/jquery-highlighter@v3.0.0/dist/highlighter.min.js)
+- [Git CDN](https://gitcdn.xyz/repo/chocolateboy/jquery-highlighter/v3.0.0/dist/highlighter.min.js)
+
+## Dependencies
+
+jQuery Highlighter has the following prerequisites:
+
+### Required
+
+- [jQuery](https://jquery.com/) (see [compatibility](#compatibility))
+
+### Optional
+
+- [jQuery-onMutate](https://github.com/eclecto/jQuery-onMutate) (for dynamic items - see [`item`](#item))
+
+## Permissions
+
+In order for highlighting to work in userscripts, the following permissions must be granted:
+
+- `GM_deleteValue` - used to clear seen IDs after they've expired
+- `GM_getValue` - used to retrieve seen IDs
+- `GM_listValues` - used to enumerate seen IDs
+- `GM_registerMenuCommand` - used to add a userscript menu command to clear all seen IDs
+- `GM_setValue` - used to store seen IDs
 
 # DESCRIPTION
 
@@ -69,36 +97,27 @@ forums and other sites where old content is replaced by new content.
 For some examples of this plugin in action, see
 [here](https://github.com/chocolateboy/userscripts#highlighters).
 
-Highlighting is enabled by calling a method on the jQuery factory object. The
+Highlighting is enabled by calling a method on the jQuery factory object. This
 method hides the implementation details behind a declarative API with defaults
 suitable for typical blog/news/aggregator sites. In most cases, only two or
 three parameters are needed to configure highlighting, only one of which is
 mandatory:
 
-* [`item`](#item): a selector for each article/story etc. (required)
-* [`target`](#target): selects the element(s) within the item element(s) that should be highlighted (defaults to the item itself if not specified)
-* [`id`](#id): a way to uniquely identify each item (defaults to the item's `id` attribute if not specified)
+- [`item`](#item): a selector for each article/story etc. (required)
+- [`target`](#target): selects the element(s) within the item element(s) that should be highlighted (defaults to the item itself if not specified)
+- [`id`](#id): a way to uniquely identify each item (defaults to the value of the item's `id` attribute if not specified)
 
 With these settings, and a few optional extras, the following behavior is enabled:
 
-* the first time a news page/site is visited, all of its items are highlighted in yellow (by default)
-* on subsequent visits, only new content (i.e. content that has been added since the last visit) is highlighted
-* eventually, after a period of time (14 days by default), the cache entries for seen items are purged to save space
-
-## Permissions
-
-In order for highlighting to work in userscripts, the following permissions must be granted:
-
-* `GM_deleteValue` - used to clear cached IDs after they've expired
-* `GM_getValue` - used to retrieve the cache entry (if any) for an item
-* `GM_registerMenuCommand` - used to add a userscript menu command to clear the cache
-* `GM_setValue` - used to add a new entry to the cache of seen item IDs
+- the first time a news page/site is visited, all of its items are highlighted in yellow (by default)
+- on subsequent visits, only new content (i.e. content that has been added since the last visit) is highlighted
+- eventually, after a period of time (7 days by default), the cached entries for seen items are purged to save space
 
 # STATIC PROPERTIES
 
 ## highlight
 
-**Signature**: `(options: Object) ⇒ void`
+**Signature**: `(options: Object) ⇒ Promise<void>`
 
 ```javascript
 $.highlight({
@@ -112,6 +131,21 @@ $.highlight({
 Highlight new items on the current page. Takes an object with the following options.
 
 ### Options
+
+#### cache
+
+**Type**: `boolean`, default: `true`
+
+```javascript
+$.highlight({
+    item: 'div.story',
+    cache: false,
+})
+```
+
+If false, the cache is neither read from nor written to. This allows
+highlighters to be modified and reloaded without having to manually clear the
+cache every time.
 
 #### color
 
@@ -133,14 +167,15 @@ target element(s) of new items is set to this color.
 
 ```javascript
 $.highlight({
-    item: 'div.story',
+    item: 'div.article',
     debug: true,
 })
 ```
 
-If true, the cache is neither read from nor written to. This allows
-highlighters to be modified and reloaded without having to manually clear the
-cache every time.
+If true, debug/diagnostic messages for some methods are logged to the console.
+Note that this logs **unencrypted** IDs (as well as their encrypted values),
+and so should only be used temporarily, for troubleshooting, to avoid exposing
+sensitive data.
 
 #### dedup
 
@@ -149,16 +184,17 @@ cache every time.
 ```javascript
 $.highlight({
     item: 'div.story',
-    debug: true,
+    cache: false,
     dedup: false,
 })
 ```
 
 If false, items are highlighted even if their IDs have already been seen. If
 true (the default), items are deduplicated i.e. items with IDs that have
-already been highlighted are skipped (not highlighted) if they appear again on
-the same page. Turning off the cache (with [`debug`](#debug)) and deduplication
-can be useful when developing highlighters and troubleshooting selectors.
+already been seen/highlighted are skipped (not highlighted) if they appear
+again on the same page. Turning off the cache (with [`cache`](#cache)) and
+deduplication can be useful when developing highlighters and troubleshooting
+selectors.
 
 #### id
 
@@ -173,11 +209,14 @@ $.highlight({
 
 A unique identifier for the item. If it's a string, the ID is the value of the
 attribute of that name in the item. If it's a function, it's passed the DOM
-element of each item as its `this` parameter and the selected target element(s)
-as a parameter and returns a unique ID for the item.
+element of each item as its `this` parameter and the jQuery wrapper for the
+selected target element(s) as a parameter and returns a unique ID for the item.
 
 If not supplied, it defaults to a function which returns the value of the
 item's `id` attribute. If the ID is not defined, a TypeError is raised.
+
+All IDs are encrypted before being read from or written to the cache to
+avoid exposing private information.
 
 #### item
 
@@ -244,7 +283,7 @@ string (i.e. with a leading `.`) via [`$.highlight.selector`](#selector).
 
 #### ttl
 
-**Type**: `Object`, default: `{ days: 14 }`
+**Type**: `Object`, default: `{ days: 7 }`
 
 ```javascript
 $.highlight({
@@ -253,7 +292,7 @@ $.highlight({
 })
 ```
 
-The "time to live" for cache entries i.e. how long each item ID should be
+The "time to live" for cached entries i.e. how long each item ID should be
 remembered for. If an entry expires, it is removed from the cache, and an item
 with the same ID will be considered new and highlighted again.
 
@@ -283,7 +322,7 @@ These pairs can be combined e.g.:
 The singular and plural versions of each unit are equivalent e.g. `{ minute: 10
 }` and `{ minutes: 10 }` both represent 600 seconds.
 
-If not supplied, it defaults to 14 days.
+If not supplied, it defaults to 7 days.
 
 ### Properties
 
@@ -315,14 +354,18 @@ for more details.
 
 # COMPATIBILITY
 
-* This plugin should work in any browser with ES5 support.
-* It has been tested with jQuery 3.x, and may not work with earlier versions.
-* It has been tested on Greasemonkey 3 and Violentmonkey, but should work in all current userscript engines.
+- This plugin should work in any browser with ES6 support.
+- It has been tested with jQuery 3.x, and may not work with earlier versions.
+- It has been tested on Greasemonkey 3 and Violentmonkey, but should work in all userscript engines which support the Greasemonkey 3 API.
 
 # SEE ALSO
 
-* [chocolateboy/userscripts](https://github.com/chocolateboy/userscripts#highlighters) - highlighter userscripts which use this plugin
-* [theoky/HistoryOfTheSeen](https://github.com/theoky/HistoryOfTheSeen) - a userscript which greys out seen links on several sites
+- [chocolateboy/userscripts](https://github.com/chocolateboy/userscripts#highlighters) - highlighter userscripts which use this plugin
+- [theoky/HistoryOfTheSeen](https://github.com/theoky/HistoryOfTheSeen) - a userscript which greys out seen links on several sites
+
+# VERSION
+
+3.0.0
 
 # AUTHOR
 
@@ -330,7 +373,7 @@ for more details.
 
 # COPYRIGHT AND LICENSE
 
-Copyright © 2013-2019 by chocolateboy.
+Copyright © 2013-2020 by chocolateboy.
 
 This is free software; you can redistribute it and/or modify it under the terms
 of the [Artistic License 2.0](http://www.opensource.org/licenses/artistic-license-2.0.php).
