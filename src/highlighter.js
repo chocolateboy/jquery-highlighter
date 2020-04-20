@@ -42,27 +42,43 @@ const TTL = (ttl => {
     return ttl
 })({})
 
+/**************************** helper classes ****************************/
+
+// expose the userscript storage backend via the standard ES6 Map API.
+// JSON serialization/deserialization is performed automatically.
+//
+// XXX this should be packaged as a module, e.g. as a plugin/backend for keyv [1]
+//
+// [1] https://github.com/lukechilds/keyv
+
+class GMStore {
+    delete (key) {
+        const deleted = this.has(key)
+        GM_deleteValue(key)
+        return deleted
+    }
+
+    get (key) {
+        const value = GM_getValue(key)
+        return value ? JSON.parse(value) : undefined
+    }
+
+    has (key) {
+        return this.get(key) !== undefined
+    }
+
+    keys (key) {
+        return GM_listValues()
+    }
+
+    set (key, value) {
+        const json = JSON.stringify(value)
+        GM_setValue(key, json)
+        return this
+    }
+}
+
 /**************************** helper functions ****************************/
-
-// fetch the supplied ID from the cache. automatically handles encryption.
-// returns true if the ID is found, false otherwise
-async function cacheHas (id) {
-    const key = await encrypt(id)
-    return !!GM_getValue(key)
-}
-
-// add an { expires, version } value to the cache under the supplied ID
-// (encrypted)
-async function cacheSet (id, expires) {
-    const date = new Date(expires).toLocaleString()
-    const key = await encrypt(id)
-    const value = { expires, version: DATA_VERSION }
-    const json = JSON.stringify(value)
-
-    debug(`caching ${id} (${key}) until ${date}`)
-    GM_setValue(key, json)
-}
-
 // log a debug message to the console if debugging is enabled (via
 // options.debug)
 function debug (...args) {
@@ -73,10 +89,9 @@ function debug (...args) {
 
 // purge expired cache entries (encrypted IDs)
 // borrowed from IMDb Tomatoes (see above)
-function purgeCached (date) {
-    for (const key of GM_listValues()) {
-        const value = GM_getValue(key)
-        const cached = JSON.parse(value)
+function purgeCached (cache, date) {
+    for (const key of cache.keys()) {
+        const cached = cache.get(key)
 
         let $delete = true
 
@@ -94,7 +109,7 @@ function purgeCached (date) {
         }
 
         if ($delete) {
-            GM_deleteValue(key)
+            cache.delete(key)
         }
     }
 }
@@ -146,13 +161,14 @@ const highlightFor = $ => async function highlight (options) {
     // without having to manually clear the cache every time
     const useCache = 'cache' in options ? !!options.cache : true
 
+    // uniform access to the cache backend which respects options.cache. if true,
+    // the userscript store is read from and written to; otherwise a transient Map
+    // is used instead
+    const cache = useCache ? new GMStore() : new Map()
+
     // if set to a falsey value, don't deduplicate article IDs i.e. *do*
     // highlight duplicate links
     const highlightDuplicateLinks = 'dedup' in options ? !options.dedup : false
-
-    // function which returns true if an article ID is cached, false
-    // otherwise; handles ID encryption
-    const seen = useCache ? cacheHas : () => false
 
     // time-to-live: how long (in milliseconds) to cache IDs for
     const ttl = ttlToMilliseconds(options.ttl || DEFAULT_TTL)
@@ -196,9 +212,9 @@ const highlightFor = $ => async function highlight (options) {
     async function processItems ($items) {
         for (const item of $items) {
             const $target = select('target', targetSelector, { context: item })
-
             const id = getId(item, [$target])
-            const cached = await seen(id)
+            const key = await encrypt(id)
+            const cached = cache.has(key)
 
             if (!cached || highlightDuplicateLinks) {
                 $target.css('background-color', color)
@@ -207,16 +223,21 @@ const highlightFor = $ => async function highlight (options) {
             }
 
             if (!cached) {
-                cacheSet(id, NOW + ttl)
+                const expires = NOW + ttl
+                const value = { expires, version: DATA_VERSION }
+                const date = new Date(expires).toLocaleString()
+
+                debug(`caching ${id} (${key}) until ${date}`)
+                cache.set(key, value)
             }
         }
     }
 
     // register this early so data can be cleared even if there's an error
-    GM_registerMenuCommand(COMMAND_NAME, () => { purgeCached(-1) })
+    GM_registerMenuCommand(COMMAND_NAME, () => { purgeCached(cache, -1) })
 
     // remove expired cache entries
-    purgeCached(NOW)
+    purgeCached(cache, NOW)
 
     const $document = $(document)
 

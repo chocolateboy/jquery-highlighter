@@ -1,3 +1,8 @@
+## 3.0.1 - TBD
+
+- fix options.cache: ensure the userscript cache isn't written to if
+  options.cache is false
+
 ## 3.0.0 - 2020-04-20
 
 **Breaking Changes**
