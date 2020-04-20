@@ -1,3 +1,7 @@
+## 3.0.2 - 2020-04-20
+
+- remove unused parameter
+
 ## 3.0.1 - 2020-04-20
 
 - fix options.cache: ensure the userscript cache isn't written to if

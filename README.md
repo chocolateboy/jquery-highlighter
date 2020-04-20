@@ -44,7 +44,7 @@ A jQuery plugin which highlights new items since the last time a site was visite
 // @description   Highlight new articles on Example.com
 // @include       https://www.example.com/news
 // @require       https://code.jquery.com/jquery-3.5.0.min.js
-// @require       https://cdn.jsdelivr.net/gh/chocolateboy/jquery-highlighter@v3.0.1/dist/highlighter.min.js
+// @require       https://cdn.jsdelivr.net/gh/chocolateboy/jquery-highlighter@v3.0.2/dist/highlighter.min.js
 // @grant         GM_deleteValue
 // @grant         GM_getValue
 // @grant         GM_listValues
@@ -63,8 +63,8 @@ $.highlight({
 
 Grab a file from the [`dist`](dist) directory or use a CDN, e.g.:
 
-- [jsDelivr](https://cdn.jsdelivr.net/gh/chocolateboy/jquery-highlighter@v3.0.1/dist/highlighter.min.js)
-- [Git CDN](https://gitcdn.xyz/repo/chocolateboy/jquery-highlighter/v3.0.1/dist/highlighter.min.js)
+- [jsDelivr](https://cdn.jsdelivr.net/gh/chocolateboy/jquery-highlighter@v3.0.2/dist/highlighter.min.js)
+- [Git CDN](https://gitcdn.xyz/repo/chocolateboy/jquery-highlighter/v3.0.2/dist/highlighter.min.js)
 
 ## Dependencies
 
@@ -365,7 +365,7 @@ for more details.
 
 # VERSION
 
-3.0.1
+3.0.2
 
 # AUTHOR
 
