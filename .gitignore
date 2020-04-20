@@ -58,7 +58,7 @@ typings/
 .yarn-integrity
 
 # Yarn Lock file
-yarn.lock
+# yarn.lock
 
 # package.json Lock file
 package-lock.json
@@ -71,5 +71,4 @@ package-lock.json
 dev/
 target/
 build/
-dist/
 temp.*
