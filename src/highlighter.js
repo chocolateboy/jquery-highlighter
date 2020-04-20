@@ -67,7 +67,7 @@ class GMStore {
         return this.get(key) !== undefined
     }
 
-    keys (key) {
+    keys () {
         return GM_listValues()
     }
 
