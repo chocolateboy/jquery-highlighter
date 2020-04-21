@@ -1,4 +1,4 @@
-## 3.0.3 - TBD
+## 3.0.3 - 2020-04-21
 
 - clean up/optimize the storage wrapper (GMStore)
   - bump the schema version
