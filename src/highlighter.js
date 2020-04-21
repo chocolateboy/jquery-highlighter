@@ -29,7 +29,7 @@ const SCRIPT_VERSION = GM_info.script.version
 // version) of the script changes
 //
 // [1] https://greasyfork.org/en/scripts/15222-imdb-tomatoes
-const SCHEMA_VERSION = 1
+const SCHEMA_VERSION = 2
 const DATA_VERSION = SCHEMA_VERSION + '/' + SCRIPT_VERSION.split('.')[0] // e.g. 1/3
 
 // time-to-live: how long (in seconds) to cache IDs for
@@ -45,11 +45,12 @@ const TTL = (ttl => {
 /**************************** helper classes ****************************/
 
 // expose the userscript storage backend via the standard ES6 Map API.
-// JSON serialization/deserialization is performed automatically.
 //
-// XXX this should be packaged as a module, e.g. as a plugin/backend for keyv [1]
+// XXX this should be packaged as a module, e.g. as a backend for keyv [1]
 //
 // [1] https://github.com/lukechilds/keyv
+
+const NOT_FOUND = Symbol()
 
 class GMStore {
     delete (key) {
@@ -59,12 +60,12 @@ class GMStore {
     }
 
     get (key) {
-        const value = GM_getValue(key)
-        return value ? JSON.parse(value) : undefined
+        const value = GM_getValue(key, NOT_FOUND)
+        return value === NOT_FOUND ? undefined : value
     }
 
     has (key) {
-        return this.get(key) !== undefined
+        return GM_getValue(key, NOT_FOUND) !== NOT_FOUND
     }
 
     keys () {
@@ -72,8 +73,7 @@ class GMStore {
     }
 
     set (key, value) {
-        const json = JSON.stringify(value)
-        GM_setValue(key, json)
+        GM_setValue(key, value)
         return this
     }
 }

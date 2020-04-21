@@ -1,3 +1,8 @@
+## 3.0.3 - TBD
+
+- clean up/optimize the storage wrapper (GMStore)
+  - bump the schema version
+
 ## 3.0.2 - 2020-04-20
 
 - remove unused parameter
