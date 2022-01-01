@@ -104,7 +104,7 @@ three parameters are needed to configure highlighting, only one of which is
 mandatory:
 
 - [`item`](#item): a selector for each article/story etc. (required)
-- [`target`](#target): selects the element(s) within the item element(s) that should be highlighted (defaults to the item itself if not specified)
+- [`target`](#target): selects the element(s) within each item that should be highlighted (defaults to the item itself if not specified)
 - [`id`](#id): a way to uniquely identify each item (defaults to the value of the item's `id` attribute if not specified)
 
 With these settings, and a few optional extras, the following behavior is enabled:
@@ -190,7 +190,7 @@ $.highlight({
 ```
 
 If false, items are highlighted even if their IDs have already been seen. If
-true (the default), items are deduplicated i.e. items with IDs that have
+true (the default), items are deduplicated, i.e. items with IDs that have
 already been seen/highlighted are skipped (not highlighted) if they appear
 again on the same page. Turning off the cache (with [`cache`](#cache)) and
 deduplication can be useful when developing highlighters and troubleshooting
@@ -215,8 +215,8 @@ selected target element(s) as a parameter and returns a unique ID for the item.
 If not supplied, it defaults to a function which returns the value of the
 item's `id` attribute. If the ID is not defined, a TypeError is raised.
 
-All IDs are encrypted before being read from or written to the cache to
-avoid exposing private information.
+All IDs are encrypted before being written to the cache to avoid exposing
+private information.
 
 #### item
 
@@ -228,14 +228,14 @@ $.highlight({
 })
 ```
 
-A selector for items. An item is a piece of updatable content e.g. a news
+A selector for items. An item is a piece of updatable content, e.g. a news
 story, article, or comment. The selector can either be a jQuery selector
 string, or a function which returns the items as a jQuery collection.
 
 If the item selector is a string and the
 [jQuery-onMutate](https://github.com/eclecto/jQuery-onMutate) plugin is loaded,
-it is used to (also) detect items that are loaded dynamically i.e. to highlight items
-loaded or displayed after the initial page load.
+it is used to (also) detect items that are loaded dynamically, i.e. to
+highlight items loaded or displayed after the initial page load.
 
 #### onHighlight
 
@@ -292,7 +292,7 @@ $.highlight({
 })
 ```
 
-The "time to live" for cached entries i.e. how long each item ID should be
+The "time to live" for cached entries, i.e. how long each item ID should be
 remembered for. If an entry expires, it is removed from the cache, and an item
 with the same ID will be considered new and highlighted again.
 
@@ -308,7 +308,7 @@ denotes the corresponding number of seconds:
 | day/days       |     24 * 60 * 60 |
 | week/weeks     | 7 * 24 * 60 * 60 |
 
-These pairs can be combined e.g.:
+These pairs can be combined, e.g.:
 
 ```javascript
 {
@@ -319,7 +319,7 @@ These pairs can be combined e.g.:
 }
 ```
 
-The singular and plural versions of each unit are equivalent e.g. `{ minute: 10
+The singular and plural versions of each unit are equivalent, e.g. `{ minute: 10
 }` and `{ minutes: 10 }` both represent 600 seconds.
 
 If not supplied, it defaults to 7 days.
@@ -348,7 +348,7 @@ The name of the CSS class added to highlighted elements. See [`target`](#target)
 const $highlighted = $($.highlight.selector)
 ```
 
-A CSS selector string which matches highlighted elements i.e. the highlighted
+A CSS selector string which matches highlighted elements, i.e. the highlighted
 [class name](#classname) with a dot (`.`) prepended. See [`target`](#target)
 for more details.
 
