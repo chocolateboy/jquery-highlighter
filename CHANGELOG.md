@@ -2,6 +2,7 @@
 
 - pass the missing item parameter to the `target` callback and fix its
   type signature
+- build clean-up
 
 ## 3.0.3 - 2020-04-21
 

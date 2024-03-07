@@ -2,7 +2,7 @@
 
 A jQuery plugin which highlights new items since the last time a site was visited
 
-<!-- toc -->
+<!-- TOC -->
 
 - [SYNOPSIS](#synopsis)
 - [INSTALLATION](#installation)
@@ -32,7 +32,7 @@ A jQuery plugin which highlights new items since the last time a site was visite
 - [AUTHOR](#author)
 - [COPYRIGHT AND LICENSE](#copyright-and-license)
 
-<!-- tocstop -->
+<!-- TOC END -->
 
 # SYNOPSIS
 
