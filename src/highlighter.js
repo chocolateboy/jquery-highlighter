@@ -211,7 +211,7 @@ const highlightFor = $ => async function highlight (options) {
     // highlight the selected articles/stories
     async function processItems ($items) {
         for (const item of $items) {
-            const $target = select('target', targetSelector, { context: item })
+            const $target = select('target', targetSelector, { context: item, args: [item] })
             const id = getId(item, [$target])
             const key = await encrypt(id)
             const cached = cache.has(key)

@@ -1,3 +1,8 @@
+## 3.0.4 - TBD
+
+- pass the missing item parameter to the `target` callback and fix its
+  type signature
+
 ## 3.0.3 - 2020-04-21
 
 - clean up/optimize the storage wrapper (GMStore)

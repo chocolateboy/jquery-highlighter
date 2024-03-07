@@ -43,7 +43,7 @@ A jQuery plugin which highlights new items since the last time a site was visite
 // @name          Example.com Highlighter
 // @description   Highlight new articles on Example.com
 // @include       https://www.example.com/news
-// @require       https://code.jquery.com/jquery-3.5.0.min.js
+// @require       https://code.jquery.com/jquery-3.7.1.min.js
 // @require       https://cdn.jsdelivr.net/gh/chocolateboy/jquery-highlighter@v3.0.3/dist/highlighter.min.js
 // @grant         GM_deleteValue
 // @grant         GM_getValue
@@ -260,7 +260,7 @@ e.g. to customize or override a target's foreground or background color.
 
 #### target
 
-**Type**: `string | (this: JQuery, item: JQuery) ⇒ JQuery`
+**Type**: `string | (this: HTMLElement, item: HTMLElement) ⇒ JQuery`
 
 ```javascript
 $.highlight({
@@ -270,9 +270,9 @@ $.highlight({
 ```
 
 The target element(s) to highlight. Can be a jQuery selector string, which is
-evaluated relative to the item, or a function, which is passed the item as its
-`this` parameter and first parameter, and which returns a jQuery collection
-containing the target element(s).
+evaluated relative to the item, or a function, which is passed the item element
+as its `this` parameter and first parameter, and which returns a jQuery
+collection containing the target element(s).
 
 If not supplied, it defaults to a function which returns the item.
 
