@@ -44,7 +44,7 @@ A jQuery plugin which highlights new items since the last time a site was visite
 // @description   Highlight new articles on Example.com
 // @include       https://www.example.com/news
 // @require       https://code.jquery.com/jquery-3.7.1.min.js
-// @require       https://cdn.jsdelivr.net/gh/chocolateboy/jquery-highlighter@v3.0.3/dist/highlighter.min.js
+// @require       https://cdn.jsdelivr.net/gh/chocolateboy/jquery-highlighter@v3.0.4/dist/highlighter.min.js
 // @grant         GM_deleteValue
 // @grant         GM_getValue
 // @grant         GM_listValues
@@ -63,8 +63,8 @@ $.highlight({
 
 Grab a file from the [`dist`](dist) directory or use a CDN, e.g.:
 
-- [jsDelivr](https://cdn.jsdelivr.net/gh/chocolateboy/jquery-highlighter@v3.0.3/dist/highlighter.min.js)
-- [Git CDN](https://gitcdn.xyz/repo/chocolateboy/jquery-highlighter/v3.0.3/dist/highlighter.min.js)
+- [jsDelivr](https://cdn.jsdelivr.net/gh/chocolateboy/jquery-highlighter@v3.0.4/dist/highlighter.min.js)
+- [Git CDN](https://gitcdn.xyz/repo/chocolateboy/jquery-highlighter/v3.0.4/dist/highlighter.min.js)
 
 ## Dependencies
 
@@ -365,7 +365,7 @@ for more details.
 
 # VERSION
 
-3.0.3
+3.0.4
 
 # AUTHOR
 
@@ -373,7 +373,7 @@ for more details.
 
 # COPYRIGHT AND LICENSE
 
-Copyright © 2013-2020 by chocolateboy.
+Copyright © 2013-2024 by chocolateboy.
 
 This is free software; you can redistribute it and/or modify it under the terms
 of the [Artistic License 2.0](http://www.opensource.org/licenses/artistic-license-2.0.php).

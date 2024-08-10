@@ -1,4 +1,4 @@
-## 3.0.4 - TBD
+## 3.0.4 - 2024-08-10
 
 - pass the missing item parameter to the `target` callback and fix its
   type signature
